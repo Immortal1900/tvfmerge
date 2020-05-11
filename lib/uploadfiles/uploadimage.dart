@@ -29,12 +29,6 @@ class uploadimage extends StatefulWidget {
 
 class _uploadimageState extends State<uploadimage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-   StorageUploadTask uploadTask;
-  StorageUploadTask vuploadTask;
-  StorageUploadTask duploadTask;
-  StorageUploadTask tuploadTask;
-
-
   static String downloadurlarr="";
   String downloadurl;
   static String downloadvurlarr="";
@@ -46,7 +40,7 @@ class _uploadimageState extends State<uploadimage> {
   bool isSuspended=false;
   // ignore: must_call_super
   void initState(){
-        uploaddata();
+    uploaddata();
     print("UPLOAD IMAGE CALLED");
   }
   Future writeCounter() async {
@@ -62,17 +56,6 @@ class _uploadimageState extends State<uploadimage> {
       print('SELECTED IMAGE IS NULL');
       thumburl="https://firebasestorage.googleapis.com/v0/b/sampletvf-8aa59.appspot.com/o/defaultimage.png?alt=media&token=a2a9bb95-0809-4c09-a685-1700301cf20e";
     }
-  }
-  void dispose(){
-
-    print("DDDIISSPPOOSSEE");
-    uploadTask.cancel();
-    vuploadTask.cancel();
-    duploadTask.cancel();
-    tuploadTask.cancel();
-
-    print("CANCEL CALLED");
-    Navigator.pop(context);
   }
   Future fetchcount()async {
     await Firestore.instance
@@ -121,7 +104,7 @@ class _uploadimageState extends State<uploadimage> {
           StorageReference firebasStorageRef=FirebaseStorage.instance.ref().child("blogposts").child("UID")
               .child("${randomAlphaNumeric(9)}.jpg");
           print(2);
-          uploadTask=firebasStorageRef.putFile(selectedimage[i]);
+            final StorageUploadTask uploadTask=firebasStorageRef.putFile(selectedimage[i]);
           print(3);
           print("UPLOAD STARTED");
           downloadurl=await(await uploadTask.onComplete).ref.getDownloadURL();
@@ -142,7 +125,7 @@ class _uploadimageState extends State<uploadimage> {
           StorageReference firebasStorageRef=FirebaseStorage.instance.ref().child("blogposts").child("UID").child("videos")
               .child("${randomAlphaNumeric(9)}.mp4");
           print(2);
-          final StorageUploadTask vuploadTask=firebasStorageRef.putFile(selectedvideo[i]);
+            final StorageUploadTask vuploadTask=firebasStorageRef.putFile(selectedvideo[i]);
           print(3);
           print("UPLOAD STARTED");
           downloadvurl=await(await vuploadTask.onComplete).ref.getDownloadURL();
@@ -160,7 +143,7 @@ class _uploadimageState extends State<uploadimage> {
       try{
         StorageReference firebasStorageRef=FirebaseStorage.instance.ref().child("blogposts").child("UID")
             .child("${randomAlphaNumeric(9)}.txt");
-        duploadTask=firebasStorageRef.putFile(flname);
+        final StorageUploadTask duploadTask=firebasStorageRef.putFile(flname);
         txtdownloadurl=await(await duploadTask.onComplete).ref.getDownloadURL();
         print("Storage TXT desc URL is $txtdownloadurl");
       }
@@ -171,7 +154,7 @@ class _uploadimageState extends State<uploadimage> {
       try{
         StorageReference firebasStorageRef=FirebaseStorage.instance.ref().child("blogposts").child("THUMBNAILS")
             .child("${randomAlphaNumeric(9)}.jpg");
-        tuploadTask=firebasStorageRef.putFile(thumbnail);
+        final StorageUploadTask tuploadTask=firebasStorageRef.putFile(thumbnail);
         thumburl=await(await tuploadTask.onComplete).ref.getDownloadURL();
         print("Storage THUMBNAIL desc URL is $thumburl");
       }
