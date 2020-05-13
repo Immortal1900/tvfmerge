@@ -20,7 +20,7 @@ class _pickvideoState extends State<pickvideo> {
 
   void initState(){
     print("INITSTATE");
-
+    getimage();
     super.initState();
   }
   Future initializeplayer() async{

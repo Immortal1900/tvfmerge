@@ -15,9 +15,14 @@ class UploadArticle extends StatefulWidget {
   @override
   _UploadArticleState createState() => _UploadArticleState();
 }
-
+final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 class _UploadArticleState extends State<UploadArticle> {
+
+
   final  authorcontrol=TextEditingController();
+  final  desccontrol=TextEditingController();
+  final  titlecontrol=TextEditingController();
+
   void initState(){
     new Directory('storage/emulated/0/tvf/').create(recursive: true);
 
@@ -25,10 +30,84 @@ class _UploadArticleState extends State<UploadArticle> {
     flname=File('storage/emulated/0/tvf/$randomfilenames.txt');
 
   }
+  void _showcontent() {
+    showDialog(
+      context: context, barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return new AlertDialog(
+          title: new Text('Are you sure to Post?'),
+          content: new SingleChildScrollView(
+            child: new ListBody(
+              children: [
+                new Text("You won't be able to cancel the upload"),
+              ],
+            ),
+          ),
+          actions: [
+            new FlatButton(
+              child: new Text('Yes'),
+              onPressed: () {
+                Navigator.push(context,MaterialPageRoute(builder: (context) => uploadimage()));
+              },
+            ),
+            new FlatButton(
+              child: new Text('No'),
+              onPressed: () {
+
+                Navigator.of(context).pop();
+
+              },
+            ),
+
+          ],
+        );
+      },
+    );
+  }
+  bool allvalid=false;
+  void checkvalidation(){
+
+    String authc=authorcontrol.text;
+    String descc=desccontrol.text;
+    String titlec=titlecontrol.text;
+    allvalid=false;
+    bool descvalid=false;
+    bool titlevalid=false;
+    bool authvalid=false;
+
+    if(authc!=''){
+      print('AUTHOR VALID');
+      authvalid=true;
+    }
+    if(descc!=''){
+      print('DESC VALID');
+      descvalid=true;
+    }
+    if(titlec!=''){
+      print('TITLE VALID');
+      titlevalid=true;
+    }
+    if(descvalid&&authvalid&&titlevalid){
+      print("ALL VALID TRUE");
+      allvalid=true;
+    }else{
+      showwhatinvalid();
+    }
+
+  }
+  void showwhatinvalid() {
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+        duration: const Duration(seconds: 1),
+        backgroundColor: Colors.blue,
+        content:Text("Please provide Title, Author and Description")
+    )
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
         appBar: AppBar(
           backgroundColor: Colors.blue,
           title: Text("CREATE POST"),
@@ -41,8 +120,12 @@ class _UploadArticleState extends State<UploadArticle> {
               color: Colors.blue[800],
               child: Text("UPLOAD IMAGE"),
               onPressed: (){
+                checkvalidation();
+                if(allvalid){
+                   _showcontent();
+                }
 
-                  Navigator.push(context,MaterialPageRoute(builder: (context) => uploadimage()));
+                 // Navigator.push(context,MaterialPageRoute(builder: (context) => uploadimage()));
 
               },
             )
@@ -65,7 +148,7 @@ class _UploadArticleState extends State<UploadArticle> {
                                 side: BorderSide(color: Colors.blue)
                             ),
                             child:  TextField(
-
+                              controller: titlecontrol,
                               decoration: InputDecoration(
                                   hintText: "  TITLE"
                               ),
@@ -116,8 +199,8 @@ class _UploadArticleState extends State<UploadArticle> {
                            side: BorderSide(color: Colors.blue)
                             ) ,
                             child:  TextField(
+                              controller: desccontrol,
                               autofocus: false,
-
                                 maxLines: 10,
                                 decoration: InputDecoration(
                                     hintText: "  DESCRIPTION"

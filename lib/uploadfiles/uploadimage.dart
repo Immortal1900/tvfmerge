@@ -67,8 +67,10 @@ class _uploadimageState extends State<uploadimage> {
     });
     print("newsCOUNT IS $position");
   }
-  Future uploadingtasks() async{
-
+  claerdb() {
+    StorageReference firebasStorageRef=FirebaseStorage.instance.ref().child("/");
+    firebasStorageRef.delete();
+    print("DATABASE CLEARED");
   }
 
   Future compressNow() async {
@@ -89,6 +91,8 @@ class _uploadimageState extends State<uploadimage> {
   }
 
   uploaddata() async{
+
+
     await compressNow();
     await fetchcount();
     print(selectedimage);
@@ -179,7 +183,7 @@ class _uploadimageState extends State<uploadimage> {
       print("MAP CREATED");
       crudMethods.addData(blogmap).then((result){
         print("FINISHED");
-        Navigator.pop(context);
+        Navigator.pop(context,MaterialPageRoute(builder: (context) => MyApp()));
       });
     }
     catch(Error){
@@ -195,7 +199,7 @@ class _uploadimageState extends State<uploadimage> {
           title: Text("text"),
         ),
         body: Center(child:
-            isloading != true? Text("SELECT IMAGE"):
+            isloading != true? Text("UPLOAD WILL START SOON"):
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,

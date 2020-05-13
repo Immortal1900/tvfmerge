@@ -66,9 +66,6 @@ class _ShowNewsDashboardState extends State<ShowNewsDashboard> {
           IconButton(icon: Icon(Icons.home), onPressed: () {
           }),
           IconButton(icon: Icon(Icons.notifications,color: Colors.white,),),
-
-
-
         ],
       ),
        drawer:Draw(context),
